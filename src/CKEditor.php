@@ -10,6 +10,8 @@ class CKEditor extends Field {
 
     protected string $name = 'ckeditor';
 
+    protected int $minLength = 0;
+
     protected ?string $uploadUrl = null;
 
     protected string $placeholder = 'Type or paste your content here...';
