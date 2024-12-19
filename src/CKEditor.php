@@ -12,6 +12,8 @@ class CKEditor extends Field {
 
     protected ?string $uploadUrl = null;
 
+    protected string $placeholder = 'Type or paste your content here...';
+
     protected string $view = 'filament-ckeditor-field::ckeditor';
  
     public static function make(string $name = 'ckeditor', ?string $uploadUrl = null): static
@@ -50,6 +52,13 @@ class CKEditor extends Field {
         return $this;
     }
 
+    public function placeholder(string $placeholder): self
+    {
+        $this->placeholder = $placeholder;
+
+        return $this;
+    }
+
     public function getContent(): string
     {
         return $this->evaluate($this->content);
@@ -58,6 +67,11 @@ class CKEditor extends Field {
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getPlaceholder(): string
+    {
+        return $this->placeholder;
     }
 
     public function getUploadUrl(): ?string

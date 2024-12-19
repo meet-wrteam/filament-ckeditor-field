@@ -1,6 +1,8 @@
 @php
     $name = $getName() ?? config('filament-ckeditor-field.upload_url');
     $uploadUrl = $getUploadUrl();
+    $placeholder = $getPlaceholder();
+    $isConcealed = $isConcealed();
 @endphp
 
 <x-dynamic-component
@@ -237,7 +239,7 @@
                     menuBar: {
                         isVisible: true
                     },
-                    placeholder: 'Type or paste your content here!',
+                    placeholder: '{{ $placeholder }}',
                     style: {
                         definitions: [
                             {
@@ -304,6 +306,11 @@
                 })
                 .then(editor => {
                     window.ckeditorInstances["ckeditor-{{ $name }}"].instance = editor;
+
+                    // Find the main ckeditor class and add some helpful class names to it
+                    {{-- todo: $isReadOnly() --}}
+                    {{-- todo: @if($isRequired() && (! $isConcealed)) @endif --}}
+                    document.getElementsByClassName('ck-editor__main')[0].classList.add('prose', 'max-w-none', 'dark:prose-invert')
 
                     // Listen to changes
                     editor.model.document.on('change:data', () => {

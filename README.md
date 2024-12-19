@@ -1,13 +1,17 @@
-# A basic CKEditor 5 form field configured with non-premium features.
+# A basic CKEditor 5 form field configured with non-premium features. *
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/kahu-software-llc/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahu-software-llc/filament-ckeditor-field)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahu-software-llc/filament-ckeditor-field)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/kahu-software-llc/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahu-software-llc/filament-ckeditor-field)
+[![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahu-software-llc/filament-ckeditor-field)
 
 
 
 This repository enables FilamentPHP forms to use CKEditor 5 and its many free features without much configuration.
+
+&ast; *This open-source plugin is not affiliated with, endorsed, or sponsored by CKSource, and any references to CKEditor are solely for descriptive purposes under their respective copyrights and trademarks.*
+
+We do encourage you to check out CKEditor's premium features for your own implementation of CKEditor as the developers have worked hard to bring us a wonderful rich editor. 
 
 ## Installation
 
@@ -75,7 +79,7 @@ Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+Please email [hello@kahusoftware.com](mailto:hello@kahusoftware.com) any security vulnerabilities to ensure they're promptly addressed.
 
 ## Credits
 
