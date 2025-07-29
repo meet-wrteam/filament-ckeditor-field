@@ -5,7 +5,8 @@ namespace Kahusoftware\FilamentCkeditorField;
 use Closure;
 use Filament\Forms\Components\Field;
 
-class CKEditor extends Field {
+class CKEditor extends Field
+{
     protected string | Closure $content = '';
 
     protected string $name = 'ckeditor';
@@ -17,7 +18,7 @@ class CKEditor extends Field {
     protected string $placeholder = 'Type or paste your content here...';
 
     protected string $view = 'filament-ckeditor-field::ckeditor';
- 
+
     public static function make(string $name = 'ckeditor', ?string $uploadUrl = null): static
     {
         return app(static::class, [
@@ -29,7 +30,7 @@ class CKEditor extends Field {
     protected function setUp(): void
     {
         parent::setUp();
- 
+
         $this->dehydrated(false);
     }
 
@@ -50,7 +51,7 @@ class CKEditor extends Field {
     public function name(string $name): static
     {
         $this->name = $name;
- 
+
         return $this;
     }
 
