@@ -3,13 +3,16 @@
     $uploadUrl = $getUploadUrl();
     $placeholder = $getPlaceholder();
     $isConcealed = $isConcealed();
+    $statePath = $getStatePath();
 @endphp
 
 <x-dynamic-component
     :component="$getFieldWrapperView()"
     :field="$field"
 >
-    <x-filament::input.wrapper :valid="$errors->count() === 0">
+    <x-filament::input.wrapper
+        :valid="! $errors->has($statePath)"
+    >
         <div wire:ignore>
             <script type="text/javascript">
                 // Initialize the instance and event listener flags if not already set
