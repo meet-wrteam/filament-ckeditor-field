@@ -4,6 +4,7 @@
     $placeholder = $getPlaceholder();
     $isConcealed = $isConcealed();
     $statePath = $getStatePath();
+    $isDisabled = $isDisabled();
 @endphp
 
 <x-dynamic-component
@@ -141,11 +142,13 @@
                                 ],
                                 shouldNotGroupWhenFull: false
                             },
-                            autosave: {
-                                save( editor ) {
-                                    Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
-                                }
-                            },
+                            @if(!$isDisabled)
+                                autosave: {
+                                    save( editor ) {
+                                        Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
+                                    }
+                                },
+                            @endif
                             fontFamily: {
                                 supportAllValues: true
                             },
@@ -312,15 +315,22 @@
                             window.ckeditorInstances["ckeditor-{{ $name }}"].instance = editor;
 
                             // Find the main ckeditor class and add some helpful class names to it
-                            {{-- todo: $isReadOnly() --}}
                             {{-- todo: @if($isRequired() && (! $isConcealed)) @endif --}}
                             document.getElementsByClassName('ck-editor__main')[0].classList.add('prose', 'max-w-none', 'dark:prose-invert')
 
-                            // Listen to changes
-                            editor.model.document.on('change:data', () => {
-                                // Emit Livewire event
-                                Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
-                            });
+                            // Listen to changes (only if not disabled)
+                            @if(!$isDisabled)
+
+                                editor.model.document.on('change:data', () => {
+                                    // Emit Livewire event
+                                    Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
+                                });
+
+                            @else
+
+                                editor.enableReadOnlyMode('{{ $name }}');
+
+                            @endif
                         })
                         .catch(err => {
                             console.error(err);
