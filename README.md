@@ -1,4 +1,4 @@
-# A basic CKEditor 5 form field configured with non-premium features. *
+# Filament CKEditor Field
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -6,15 +6,38 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
 [![License](https://img.shields.io/packagist/l/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
+# Features
 
+-   CKEditor 5 integration for FilamentPHP 3 forms
+-   Image upload support with configurable upload URLs
+-   Highly customizable with fluent API
+-   Non-premium features only (free and open-source)
+-   Easy to configure and use
 
-This repository enables FilamentPHP forms to use CKEditor 5 and its many free features without much configuration.
+<br>
 
-&ast; *This open-source plugin is not affiliated with, endorsed, or sponsored by CKSource, and any references to CKEditor are solely for descriptive purposes under their respective copyrights and trademarks.*
+# Table of contents
 
-We do encourage you to check out CKEditor's premium features for your own implementation of CKEditor as the developers have worked hard to bring us a wonderful rich editor. 
+- [Filament CKEditor Field](#filament-ckeditor-field)
+- [Features](#features)
+- [Table of contents](#table-of-contents)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+  - [Available methods](#available-methods)
+    - [uploadUrl(`string` | `Closure` | `null` $uploadUrl)](#uploadurlstring--closure--null-uploadurl)
+    - [name(`string` $name)](#namestring-name)
+    - [placeholder(`string` $placeholder)](#placeholderstring-placeholder)
+- [Testing](#testing)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
+- [Security Vulnerabilities](#security-vulnerabilities)
+- [Credits](#credits)
+- [License](#license)
 
-## Installation
+<br>
+
+# Installation
 
 You can install the package via composer:
 
@@ -27,15 +50,24 @@ You can publish the config file with:
 ```bash
 php artisan vendor:publish --tag="filament-ckeditor-field-config"
 ```
-<!--
 
-Optionally, you can publish the views using
+<br>
 
-```bash
-php artisan vendor:publish --tag="filament-ckeditor-field-views"
+# Usage
+
+Basic usage:
+
+```php
+use Kahusoftware\FilamentCkeditorField\CKEditor;
+
+CKEditor::make('content')
+    ->uploadUrl(null)
 ```
 
--->
+<br>
+
+# Configuration
+
 This is the contents of the published config file:
 
 ```php
@@ -52,16 +84,26 @@ return [
 ];
 ```
 
-## Usage
+## Available methods
 
-```php
-use Kahusoftware\FilamentCkeditorField\CKEditor;
+### uploadUrl(`string` | `Closure` | `null` $uploadUrl)
+Sets the URL endpoint for image uploads. If not specified, the default upload URL from the config file will be used.
 
-CKEditor::make('content')
-    ->uploadUrl(null)
-```
+`uploadUrl` (Default: `null`)
 
-## Testing
+### name(`string` $name)
+Sets the name of the field. This will be used as the form field name.
+
+`name` (Default: `'ckeditor'`)
+
+### placeholder(`string` $placeholder)
+Sets the placeholder text displayed in the editor when it's empty.
+
+`placeholder` (Default: `'Type or paste your content here...'`)
+
+<br>
+
+# Testing
 
 ```bash
 composer test
@@ -69,23 +111,31 @@ composer test
 
 The test suite uses PestPHP and includes unit tests for field instantiation, method chaining, and configuration, as well as feature tests for rendering the field within Livewire components.
 
-## Changelog
+<br>
+
+# Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
+# Contributing
 
 Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
-## Security Vulnerabilities
+# Security Vulnerabilities
 
 Please email [hello@kahusoftware.com](mailto:hello@kahusoftware.com) any security vulnerabilities to ensure they're promptly addressed.
 
-## Credits
+# Credits
 
-- [Thomas Johnson](https://github.com/tominal)
-- [All Contributors](../../contributors)
+-   [Thomas Johnson](https://github.com/tominal)
+-   [All Contributors](../../contributors)
 
-## License
+# License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+---
+
+&ast; *This open-source plugin is not affiliated with, endorsed, or sponsored by CKSource, and any references to CKEditor are solely for descriptive purposes under their respective copyrights and trademarks.*
+
+We do encourage you to check out CKEditor's premium features for your own implementation of CKEditor as the developers have worked hard to bring us a wonderful rich editor.
