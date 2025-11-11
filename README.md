@@ -1,14 +1,16 @@
 # Filament CKEditor Field
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3A2.x)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/fix-php-code-styling.yml?branch=2.x&label=code%20style&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3A2.x)
 [![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
 [![License](https://img.shields.io/packagist/l/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
+> **Note:** This branch (`2.x`) is specifically for FilamentPHP 4.x. If you're using FilamentPHP 3.x, please use the [`1.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/1.x).
+
 # Features
 
--   CKEditor 5 integration for FilamentPHP 3 forms
+-   CKEditor 5 integration for FilamentPHP 4 forms
 -   Image upload support with configurable upload URLs
 -   Highly customizable with fluent API
 -   Non-premium features only (free and open-source)

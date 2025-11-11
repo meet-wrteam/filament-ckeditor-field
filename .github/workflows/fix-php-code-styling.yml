@@ -2,7 +2,7 @@ name: Fix PHP code styling
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 1.x, 2.x ]
   workflow_dispatch:
 
 jobs:
