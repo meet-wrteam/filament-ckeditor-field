@@ -12,6 +12,7 @@
 
 -   CKEditor 5 integration for FilamentPHP 4 forms
 -   Image upload support with configurable upload URLs
+-   Full control over image upload handling - you implement your own upload endpoint
 -   Highly customizable with fluent API
 -   Non-premium features only (free and open-source)
 -   Easy to configure and use
