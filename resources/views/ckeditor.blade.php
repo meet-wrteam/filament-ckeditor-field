@@ -238,6 +238,14 @@
                                         attributes: true,
                                         classes: true
                                     }
+                                ],
+                                disallow: [
+                                    {
+                                        styles: {
+                                            'background-color': true,
+                                            'color': true
+                                        }
+                                    }
                                 ]
                             },
                             image: {

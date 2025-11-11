@@ -4,6 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
+[![License](https://img.shields.io/packagist/l/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
 
 
@@ -41,9 +42,6 @@ This is the contents of the published config file:
 return [
     /**
      * Image upload enabled
-     * 
-     * WARNING: Setting this to false will use CKEditor's default Base64 upload method which is HIGHLY INEFFICIENT.
-     * https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html#base64-adapter
      */
     'upload_enabled' => true,
 
@@ -68,6 +66,8 @@ CKEditor::make('content')
 ```bash
 composer test
 ```
+
+The test suite uses PestPHP and includes unit tests for field instantiation, method chaining, and configuration, as well as feature tests for rendering the field within Livewire components.
 
 ## Changelog
 

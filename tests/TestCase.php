@@ -47,5 +47,13 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        
+        // Set up app key for encryption (required for Livewire)
+        config()->set('app.key', 'base64:' . base64_encode(
+            \Illuminate\Support\Str::random(32)
+        ));
+
+        // Set up views path for test views
+        $app['view']->addNamespace('test', __DIR__ . '/views');
     }
 }

@@ -13,7 +13,7 @@ class CKEditor extends Field
 
     protected int $minLength = 0;
 
-    protected ?string $uploadUrl = null;
+    protected string | Closure | null $uploadUrl = null;
 
     protected string $placeholder = 'Type or paste your content here...';
 
@@ -21,10 +21,15 @@ class CKEditor extends Field
 
     public static function make(string $name = 'ckeditor', ?string $uploadUrl = null): static
     {
-        return app(static::class, [
+        $field = app(static::class, [
             'name' => $name,
-            'uploadUrl' => $uploadUrl,
         ]);
+        
+        if ($uploadUrl !== null) {
+            $field->uploadUrl($uploadUrl);
+        }
+        
+        return $field;
     }
 
     protected function setUp(): void
