@@ -73,13 +73,21 @@
                                 ImageBlock,
                                 ImageCaption,
                                 ImageInline,
-                                ImageInsert,
-                                ImageInsertViaUrl,
+                                @if($uploadUrl)
+
+                                    ImageInsert,
+                                    ImageInsertViaUrl,
+                                    ImageUpload,
+
+                                @else
+
+                                    ImageInsertViaUrl,
+
+                                @endif
                                 ImageResize,
                                 ImageStyle,
                                 ImageTextAlternative,
                                 ImageToolbar,
-                                ImageUpload,
                                 Indent,
                                 IndentBlock,
                                 Italic,
@@ -94,7 +102,13 @@
                                 RemoveFormat,
                                 SelectAll,
                                 ShowBlocks,
-                                SimpleUploadAdapter,
+
+                                @if($uploadUrl)
+
+                                    SimpleUploadAdapter,
+                                
+                                    @endif
+
                                 SourceEditing,
                                 SpecialCharacters,
                                 SpecialCharactersArrows,
@@ -139,7 +153,13 @@
                                     'underline',
                                     '|',
                                     'link',
-                                    'insertImage',
+                                    
+                                    @if($uploadUrl)
+
+                                        'insertImage',
+                                    
+                                    @endif
+                                    
                                     'insertTable',
                                     'highlight',
                                     'blockQuote',
