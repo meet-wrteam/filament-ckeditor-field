@@ -143,11 +143,13 @@
                                 shouldNotGroupWhenFull: false
                             },
                             @if(!$isDisabled)
+                            
                                 autosave: {
                                     save( editor ) {
                                         Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
                                     }
                                 },
+
                             @endif
                             fontFamily: {
                                 supportAllValues: true
