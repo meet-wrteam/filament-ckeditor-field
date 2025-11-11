@@ -5,6 +5,8 @@
     $isConcealed = $isConcealed();
     $statePath = $getStatePath();
     $isDisabled = $isDisabled();
+    // Create a safe identifier from statePath for use in JavaScript
+    $editorId = str_replace(['.', '[', ']'], ['-', '-', ''], $statePath);
 @endphp
 
 <x-dynamic-component
@@ -17,23 +19,34 @@
         <div wire:ignore>
             <script type="text/javascript">
                 // Initialize the instance and event listener flags if not already set
-                if (!window.ckeditorInstances["ckeditor-{{ $name }}"]) {
-                    window.ckeditorInstances["ckeditor-{{ $name }}"] = {
+                if (!window.ckeditorInstances["ckeditor-{{ $editorId }}"]) {
+                    window.ckeditorInstances["ckeditor-{{ $editorId }}"] = {
                         instance: null,
-                        eventListenerAdded: false
+                        eventListenerAdded: false,
+                        createHandler: null,
+                        destroyHandler: null
                     };
                 }
 
-                function createCKEditor() {
-                    // Destroy existing editor to prevent duplicates
-                    if (window.ckeditorInstances["ckeditor-{{ $name }}"].instance) {
-                        // destroyCKEditor();
+                function createCKEditor(editorId, statePath, alpineComponent) {
+                    // To prevent duplicates, halt here if an editor already exists
+                    if (window.ckeditorInstances["ckeditor-" + editorId].instance) {
                         return;
                     }
 
+                    // Check if the textarea element exists
+                    const textarea = document.querySelector('#ckeditor-' + editorId);
+                    if (!textarea) {
+                        return;
+                    }
+
+                    // Store statePath and Alpine component for this editor instance
+                    window.ckeditorInstances["ckeditor-" + editorId].statePath = statePath;
+                    window.ckeditorInstances["ckeditor-" + editorId].alpineComponent = alpineComponent;
+
                     // Create new editor instance
                     ClassicEditor
-                        .create(document.querySelector('#ckeditor-{{ $name }}'), {
+                        .create(textarea, {
                             plugins: [
                                 AccessibilityHelp,
                                 Alignment,
@@ -143,13 +156,7 @@
                                 shouldNotGroupWhenFull: false
                             },
                             @if(!$isDisabled)
-                            
-                                autosave: {
-                                    save( editor ) {
-                                        Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
-                                    }
-                                },
-
+                            // Autosave is disabled - we'll update state on blur/debounced changes instead
                             @endif
                             fontFamily: {
                                 supportAllValues: true
@@ -301,36 +308,43 @@
                             table: {
                                 contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
                             },
+
                             @isset($uploadUrl)
 
-                            simpleUpload: {
-                                uploadUrl: '{{ $uploadUrl }}',
-                                withCredentials: true,
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                simpleUpload: {
+                                    uploadUrl: '{{ $uploadUrl }}',
+                                    withCredentials: true,
+                                    headers: {
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    }
                                 }
-                            }
 
                             @endisset
                         })
                         .then(editor => {
-                            window.ckeditorInstances["ckeditor-{{ $name }}"].instance = editor;
+                            window.ckeditorInstances["ckeditor-" + editorId].instance = editor;
 
                             // Find the main ckeditor class and add some helpful class names to it
+
                             {{-- todo: @if($isRequired() && (! $isConcealed)) @endif --}}
+
                             document.getElementsByClassName('ck-editor__main')[0].classList.add('prose', 'max-w-none', 'dark:prose-invert')
 
                             // Listen to changes (only if not disabled)
                             @if(!$isDisabled)
 
+                                // Update Alpine state immediately on every change (no network calls)
                                 editor.model.document.on('change:data', () => {
-                                    // Emit Livewire event
-                                    Livewire.dispatch('contentUpdated', { content: editor.getData(), editor: 'ckeditor-{{ $name }}' })
+                                    const instance = window.ckeditorInstances["ckeditor-" + editorId];
+                                    if (instance.alpineComponent) {
+                                        // Update Alpine state directly (will sync via $entangle on form submit)
+                                        instance.alpineComponent.state = editor.getData();
+                                    }
                                 });
 
                             @else
 
-                                editor.enableReadOnlyMode('{{ $name }}');
+                                editor.enableReadOnlyMode('{{ $editorId }}');
 
                             @endif
                         })
@@ -339,36 +353,66 @@
                         });
                 }
 
-                function destroyCKEditor() {
-                    if (window.ckeditorInstances["ckeditor-{{ $name }}"].instance) {
-                        window.ckeditorInstances["ckeditor-{{ $name }}"].instance.destroy()
+                function destroyCKEditor(editorId) {
+                    if (window.ckeditorInstances["ckeditor-" + editorId]?.instance) {
+                        window.ckeditorInstances["ckeditor-" + editorId].instance.destroy()
                             .then(() => {
-                                window.ckeditorInstances["ckeditor-{{ $name }}"].instance = null;
+                                window.ckeditorInstances["ckeditor-" + editorId].instance = null;
                             })
                             .catch(err => {
                                 console.error('Failed to destroy editor:', err);
                             });
                     }
                 }
+
+                // Create bound wrapper functions for event listeners (will be set with Alpine component in init)
+                window.ckeditorInstances["ckeditor-{{ $editorId }}"].createHandler = null;
+                window.ckeditorInstances["ckeditor-{{ $editorId }}"].destroyHandler = () => destroyCKEditor('{{ $editorId }}');
             </script>
             <div
                 x-data="{
                     state: $wire.$entangle('{{ $getStatePath() }}'),
                     init() {
+                        const instance = window.ckeditorInstances['ckeditor-{{ $editorId }}'];
+                        
+                        // Create handler with Alpine component context
+                        instance.createHandler = () => createCKEditor('{{ $editorId }}', '{{ $statePath }}', this);
+                        
                         // Remove existing event listeners to prevent duplicates
-                        document.removeEventListener('livewire:navigated', createCKEditor);
-                        document.removeEventListener('livewire:navigate', destroyCKEditor);
-
-                        // Add event listeners if not already added
-                        if (!window.ckeditorInstances['ckeditor-{{ $name }}'].eventListenerAdded) {
-                            // todo: Look into the { once: true } option if necessary
-                            document.addEventListener('livewire:navigated', createCKEditor);
-                            document.addEventListener('livewire:navigate', destroyCKEditor);
-                            window.ckeditorInstances['ckeditor-{{ $name }}'].eventListenerAdded = true;
+                        if (instance.createHandler) {
+                            document.removeEventListener('livewire:navigated', instance.createHandler);
+                        }
+                        if (instance.destroyHandler) {
+                            document.removeEventListener('livewire:navigate', instance.destroyHandler);
                         }
 
-                        Livewire.on('contentUpdated', (payload) => {
-                            this.state = payload.content;
+                        // Add event listeners if not already added
+                        if (!instance.eventListenerAdded && instance.createHandler && instance.destroyHandler) {
+                            document.addEventListener('livewire:navigated', instance.createHandler);
+                            document.addEventListener('livewire:navigate', instance.destroyHandler);
+                            instance.eventListenerAdded = true;
+                        }
+
+                        // Initialize editor immediately if ClassicEditor is available
+                        this.$nextTick(() => {
+                            if (typeof ClassicEditor !== 'undefined' && !instance.instance) {
+                                const textarea = document.querySelector('#ckeditor-{{ $editorId }}');
+                                if (textarea) {
+                                    createCKEditor('{{ $editorId }}', '{{ $statePath }}', this);
+                                }
+                            }
+                        });
+
+                        // Watch for state changes and update editor content
+                        this.$watch('state', (value) => {
+                            const editor = instance.instance;
+                            if (editor && value !== null && value !== undefined) {
+                                const currentContent = editor.getData();
+                                // Only update if content actually changed to prevent loops
+                                if (currentContent !== value) {
+                                    editor.setData(value);
+                                }
+                            }
                         });
                     }
                 }"
@@ -376,7 +420,7 @@
                 x-load-css="[@js(\Filament\Support\Facades\FilamentAsset::getStyleHref('filament-ckeditor-field', package: 'kahusoftware/filament-ckeditor-field'))]"
             >
                 <textarea
-                    id="ckeditor-{{ $name }}"
+                    id="ckeditor-{{ $editorId }}"
                     name="{{ $name }}"
                     x-model="state"
                 ></textarea>
