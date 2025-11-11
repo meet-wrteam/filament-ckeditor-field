@@ -44,8 +44,7 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "@php ./vendor/bin/testbench package:discover --ansi",
-            "@php artisan vendor:publish --tag=filament-ckeditor-field"
+            "@php ./vendor/bin/testbench package:discover --ansi"
         ],
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage"
