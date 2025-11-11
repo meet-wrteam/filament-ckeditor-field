@@ -13,6 +13,8 @@ use Filament\Support\SupportServiceProvider;
 use Filament\Tables\TablesServiceProvider;
 use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
@@ -23,6 +25,12 @@ class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Fix for Laravel 11 compatibility: Ensure ViewErrorBag is properly initialized
+        // This prevents Livewire from trying to put null MessageBag instances
+        $errorBag = new ViewErrorBag();
+        $errorBag->put('default', new MessageBag());
+        view()->share('errors', $errorBag);
     }
 
     protected function getPackageProviders($app)
