@@ -1,16 +1,16 @@
 # Filament CKEditor Field
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3A2.x)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/fix-php-code-styling.yml?branch=2.x&label=code%20style&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3A2.x)
 [![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
 [![License](https://img.shields.io/packagist/l/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
-> **Note:** This branch (`2.x`) is specifically for FilamentPHP 4.x. If you're using FilamentPHP 3.x, please use the [`1.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/2.x).
+> **Note:** This branch (`2.x`) is specifically for FilamentPHP 4.x. If you're using FilamentPHP 3.x, please use the [`1.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/1.x).
 
 # Features
 
--   CKEditor 5 integration for FilamentPHP 3 forms
+-   CKEditor 5 integration for FilamentPHP 4 forms
 -   Image upload support with configurable upload URLs
 -   Full control over image upload handling - you implement your own upload endpoint
 -   Highly customizable with fluent API
@@ -140,6 +140,54 @@ public function uploadImage(Request $request)
 ```
 
 For more details, see the [CKEditor Custom Upload Adapter documentation](https://ckeditor.com/docs/ckeditor5/latest/framework/deep-dive/upload-adapter.html#passing-additional-data-to-the-response).
+
+> **Note:** This package gives you freedom to handle image uploads yourself. You are responsible for creating your own upload endpoint that handles file validation, storage, and returns the appropriate response format. This design allows you to implement your own business logic, security measures, and storage solutions (local filesystem, S3, cloud storage, etc.).
+
+This package uses CKEditor's [Simple Upload Adapter](https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/simple-upload-adapter.html), which requires your upload endpoint to return a JSON response containing the uploaded image URL(s).
+
+**Expected Response Format:**
+
+Your upload endpoint must return a JSON response with one of the following formats:
+
+**Single image upload:**
+```json
+{
+    "url": "https://example.com/uploads/image.jpg"
+}
+```
+
+**Multiple images upload:**
+```json
+{
+    "urls": {
+        "default": "https://example.com/uploads/image.jpg",
+        "image-1": "https://example.com/uploads/image1.jpg",
+        "image-2": "https://example.com/uploads/image2.jpg"
+    }
+}
+```
+
+**Example Laravel Controller:**
+
+```php
+use Illuminate\Http\Request;
+
+public function uploadImage(Request $request)
+{
+    $request->validate([
+        'upload' => 'required|image|max:2048',
+    ]);
+
+    $path = $request->file('upload')->store('uploads', 'public');
+    $url = asset('storage/' . $path);
+
+    return response()->json([
+        'url' => $url
+    ]);
+}
+```
+
+For more details, see the [CKEditor Simple Upload Adapter documentation](https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/simple-upload-adapter.html).
 
 ### name(`string` $name)
 Sets the name of the field. This will be used as the form field name.
