@@ -6,7 +6,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
 [![License](https://img.shields.io/packagist/l/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
-> **Note:** This branch (`1.x`) is specifically for FilamentPHP 3.x. If you're using FilamentPHP 4.x, please use the [`2.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/2.x).
+> **Note:** This branch (`2.x`) is specifically for FilamentPHP 4.x. If you're using FilamentPHP 3.x, please use the [`1.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/2.x).
 
 # Features
 
