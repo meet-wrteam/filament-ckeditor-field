@@ -42,7 +42,7 @@
 
 # Installation
 
-You can install the package via composer:
+You can install the field via composer:
 
 ```bash
 composer require kahusoftware/filament-ckeditor-field
@@ -93,6 +93,53 @@ return [
 Sets the URL endpoint for image uploads. If not specified, the default upload URL from the config file will be used.
 
 `uploadUrl` (Default: `null`)
+> **Note:** This field gives you freedom to handle image uploads yourself. You are responsible for creating your own upload endpoint that handles file validation, storage, and returns the appropriate response format. This design allows you to implement your own business logic, security measures, and storage solutions (local filesystem, S3, cloud storage, etc.).
+
+This field uses CKEditor's [Custom Upload Adapter](https://ckeditor.com/docs/ckeditor5/latest/framework/deep-dive/upload-adapter.html), which requires your upload endpoint to return a JSON response containing the uploaded image URL(s).
+
+**Expected Response Format:**
+
+Your upload endpoint must return a JSON response with one of the following formats:
+
+**Single image response:**
+```json
+{
+    "url": "https://example.com/uploads/image.jpg"
+}
+```
+
+**Responsive images response:**
+```json
+{
+    "urls": {
+        "default": "https://example.com/uploads/image.jpg",
+        "500": "https://example.com/uploads/image1.jpg",
+        "1000": "https://example.com/uploads/image2.jpg"
+    }
+}
+```
+
+**Example Laravel Controller:**
+
+```php
+use Illuminate\Http\Request;
+
+public function uploadImage(Request $request)
+{
+    $request->validate([
+        'upload' => 'required|image|max:2048',
+    ]);
+
+    $path = $request->file('upload')->store('uploads', 'public');
+    $url = asset('storage/' . $path);
+
+    return response()->json([
+        'url' => $url
+    ]);
+}
+```
+
+For more details, see the [CKEditor Custom Upload Adapter documentation](https://ckeditor.com/docs/ckeditor5/latest/framework/deep-dive/upload-adapter.html#passing-additional-data-to-the-response).
 
 > **Note:** This package gives you freedom to handle image uploads yourself. You are responsible for creating your own upload endpoint that handles file validation, storage, and returns the appropriate response format. This design allows you to implement your own business logic, security measures, and storage solutions (local filesystem, S3, cloud storage, etc.).
 
