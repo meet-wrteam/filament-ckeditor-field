@@ -15,6 +15,8 @@ class CKEditor extends Field
 
     protected string | Closure | null $uploadUrl = null;
 
+    protected bool $uploadUrlExplicitlySet = false;
+
     protected string $placeholder = 'Type or paste your content here...';
 
     protected string $view = 'filament-ckeditor-field::ckeditor';
@@ -38,6 +40,7 @@ class CKEditor extends Field
     public function uploadUrl(string | Closure | null $uploadUrl): self
     {
         $this->uploadUrl = $uploadUrl;
+        $this->uploadUrlExplicitlySet = true;
 
         return $this;
     }
@@ -80,6 +83,11 @@ class CKEditor extends Field
 
     public function getUploadUrl(): ?string
     {
-        return $this->evaluate($this->uploadUrl);
+        if ($this->uploadUrlExplicitlySet) {
+            return $this->evaluate($this->uploadUrl);
+        }
+
+        // If not explicitly set, use config value as default
+        return config('filament-ckeditor-field.upload_url');
     }
 }
