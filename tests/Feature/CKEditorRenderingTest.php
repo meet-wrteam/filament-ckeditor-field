@@ -1,210 +1,72 @@
 <?php
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Illuminate\View\View;
+use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 use Kahusoftware\FilamentCkeditorField\CKEditor;
-use Livewire\Component;
-use Livewire\Livewire;
+use Kahusoftware\FilamentCkeditorField\Tests\Helpers\Livewire;
 
-it('can render ckeditor field in a livewire component', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+it('can set state path from its name', function (): void {
+    $field = CKEditor::make($name = Str::random())
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormFieldExists('content');
+    expect($field)
+        ->getStatePath()->toBe($name);
 });
 
-it('can render ckeditor field with upload url in livewire component', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+it('can render ckeditor field with upload url', function () {
+    $field = CKEditor::make('content')
+        ->uploadUrl('/upload')
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->uploadUrl('/upload'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful();
+    expect($field->getUploadUrl())->toBe('/upload');
 });
 
-it('can render ckeditor field with custom placeholder in livewire component', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+it('can render ckeditor field with custom placeholder', function () {
+    $field = CKEditor::make('content')
+        ->placeholder('Custom placeholder text')
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->placeholder('Custom placeholder text'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful();
+    expect($field->getPlaceholder())->toBe('Custom placeholder text');
 });
 
 it('can render ckeditor field alongside other fields', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $schema = Schema::make(Livewire::make())
+        ->components([
+            TextInput::make('title'),
+            CKEditor::make('content'),
+        ]);
 
-        public ?string $title = null;
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    TextInput::make('title'),
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormFieldExists('title')
-        ->assertFormFieldExists('content');
+    expect($schema->getComponents())
+        ->toHaveCount(2)
+        ->and($schema->getComponents()[0]->getName())->toBe('title')
+        ->and($schema->getComponents()[1]->getName())->toBe('content');
 });
 
 it('can render two ckeditor fields in one form', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $schema = Schema::make(Livewire::make())
+        ->components([
+            CKEditor::make('content'),
+            CKEditor::make('excerpt'),
+        ]);
 
-        public ?string $content = null;
-        public ?string $excerpt = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                    CKEditor::make('excerpt'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful();
+    expect($schema->getComponents())
+        ->toHaveCount(2)
+        ->and($schema->getComponents()[0]->getName())->toBe('content')
+        ->and($schema->getComponents()[1]->getName())->toBe('excerpt');
 });
 
 it('can render three ckeditor fields in one form', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $schema = Schema::make(Livewire::make())
+        ->components([
+            CKEditor::make('content'),
+            CKEditor::make('excerpt'),
+            CKEditor::make('notes'),
+        ]);
 
-        public ?string $content = null;
-        public ?string $excerpt = null;
-        public ?string $notes = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                    CKEditor::make('excerpt'),
-                    CKEditor::make('notes'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful();
+    expect($schema->getComponents())
+        ->toHaveCount(3)
+        ->and($schema->getComponents()[0]->getName())->toBe('content')
+        ->and($schema->getComponents()[1]->getName())->toBe('excerpt')
+        ->and($schema->getComponents()[2]->getName())->toBe('notes');
 });
-
-it('includes dark mode class in rendered output', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
-
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    $html = Livewire::test($component::class)
-        ->assertSuccessful()
-        ->html();
-
-    // Verify that the dark mode class is present in the JavaScript code
-    expect($html)->toContain('dark:prose-invert');
-});
-

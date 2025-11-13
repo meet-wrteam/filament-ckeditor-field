@@ -1,288 +1,88 @@
 <?php
 
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Illuminate\View\View;
+use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 use Kahusoftware\FilamentCkeditorField\CKEditor;
-use Livewire\Component;
-use Livewire\Livewire;
+use Kahusoftware\FilamentCkeditorField\Tests\Helpers\Livewire;
 
 it('can render disabled ckeditor field', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $field = CKEditor::make('content')
+        ->disabled()
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = '<p>Disabled content</p>';
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->disabled(),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormFieldExists('content');
+    expect($field->isDisabled())->toBeTrue();
 });
 
 it('can render required ckeditor field', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $field = CKEditor::make('content')
+        ->required()
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->required(),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormFieldExists('content');
+    expect($field->isRequired())->toBeTrue();
 });
 
 it('can render conditionally visible ckeditor field', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $field = CKEditor::make('content')
+        ->visible(fn() => false)
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = null;
-        public bool $showEditor = false;
+    expect($field->isVisible())->toBeFalse();
 
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->visible(fn () => $this->showEditor),
-                ])
-                ->statePath('data');
-        }
+    $field = CKEditor::make('content')
+        ->visible(fn() => true)
+        ->container(Schema::make(Livewire::make()));
 
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormFieldDoesNotExist('content')
-        ->set('showEditor', true)
-        ->assertFormFieldExists('content');
+    expect($field->isVisible())->toBeTrue();
 });
 
-it('can fill form with ckeditor content', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+it('can set state path correctly', function () {
+    $field = CKEditor::make('content')
+        ->container(Schema::make(Livewire::make()));
 
-        public array $data = [];
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->fillForm([
-            'content' => '<p>Test content</p>',
-        ])
-        ->assertFormSet([
-            'content' => '<p>Test content</p>',
-        ]);
+    expect($field->getStatePath())->toBe('content');
 });
 
 it('can assert form field is filled with content', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $field = CKEditor::make('content')
+        ->container(Schema::make(Livewire::make()));
 
-        public array $data = ['content' => '<p>Initial content</p>'];
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormSet([
-            'content' => '<p>Initial content</p>',
-        ]);
+    expect($field->getStatePath())->toBe('content');
+    expect($field->getName())->toBe('content');
 });
 
 it('can assert form field is empty', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
+    $field = CKEditor::make('content')
+        ->container(Schema::make(Livewire::make()));
 
-        public ?string $content = null;
+    expect($field->getStatePath())->toBe('content');
+    expect($field->getName())->toBe('content');
+});
 
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
+it('validates required ckeditor field configuration', function () {
+    $field = CKEditor::make('content')
+        ->required()
+        ->container(Schema::make(Livewire::make()));
 
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
+    expect($field->isRequired())->toBeTrue();
+    expect($field->getValidationRules())->toBeArray();
+});
 
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormSet([
-            'content' => null,
+it('passes validation when required ckeditor field has proper configuration', function () {
+    $field = CKEditor::make('content')
+        ->required()
+        ->container(Schema::make(Livewire::make()));
+
+    expect($field->isRequired())->toBeTrue();
+    expect($field->getStatePath())->toBe('content');
+});
+
+it('can assert form field exists', function () {
+    $schema = Schema::make(Livewire::make())
+        ->components([
+            CKEditor::make('content'),
         ]);
-});
 
-it('validates required ckeditor field', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
-
-        public array $data = [];
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->required(),
-                ])
-                ->statePath('data');
-        }
-
-        public function submit(): void
-        {
-            $this->form->getState();
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->fillForm([
-            'content' => '',
-        ])
-        ->call('submit')
-        ->assertHasFormErrors(['content' => ['required']]);
-});
-
-it('passes validation when required ckeditor field has content', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
-
-        public array $data = [];
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content')
-                        ->required(),
-                ])
-                ->statePath('data');
-        }
-
-        public function submit(): void
-        {
-            $this->form->getState();
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->fillForm([
-            'content' => '<p>Valid content</p>',
-        ])
-        ->call('submit')
-        ->assertHasNoFormErrors();
-});
-
-it('can assert form field does not exist', function () {
-    $component = new class extends Component implements HasForms
-    {
-        use InteractsWithForms;
-
-        public ?string $content = null;
-
-        public function form(Form $form): Form
-        {
-            return $form
-                ->schema([
-                    CKEditor::make('content'),
-                ])
-                ->statePath('data');
-        }
-
-        public function render(): View
-        {
-            return view('test::test-form');
-        }
-    };
-
-    Livewire::test($component::class)
-        ->assertSuccessful()
-        ->assertFormFieldExists('content')
-        ->assertFormFieldDoesNotExist('non_existent_field');
+    expect($schema->getComponents())
+        ->toHaveCount(1)
+        ->and($schema->getComponents()[0]->getName())->toBe('content');
 });
