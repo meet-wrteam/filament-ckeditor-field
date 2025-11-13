@@ -8,6 +8,8 @@
 
 > **Note:** This branch (`2.x`) is specifically for FilamentPHP 4.x. If you're using FilamentPHP 3.x, please use the [`1.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/1.x).
 
+![](https://cdn.kahusoftware.com/uploads/kahu-software-llc-ckeditor-field.jpg)
+
 # Features
 
 -   CKEditor 5 integration for FilamentPHP 4 forms
