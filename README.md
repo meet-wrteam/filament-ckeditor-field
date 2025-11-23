@@ -9,7 +9,7 @@
 
 ![](https://cdn.kahusoftware.com/uploads/kahu-software-llc-ckeditor-field.jpg)
 
-# Features
+## Features
 
 -   CKEditor 5 integration for FilamentPHP 3 forms
 -   Image upload support with configurable upload URLs
@@ -20,7 +20,7 @@
 
 <br>
 
-# Table of contents
+## Table of contents
 
 - [Filament CKEditor Field](#filament-ckeditor-field)
 - [Features](#features)
@@ -41,7 +41,7 @@
 
 <br>
 
-# Installation
+## Installation
 
 You can install the field via composer:
 
@@ -57,7 +57,7 @@ php artisan vendor:publish --tag="filament-ckeditor-field-config"
 
 <br>
 
-# Usage
+## Usage
 
 Basic usage:
 
@@ -70,7 +70,7 @@ CKEditor::make('content')
 
 <br>
 
-# Configuration
+## Configuration
 
 This is the contents of the published config file:
 
@@ -88,9 +88,9 @@ return [
 ];
 ```
 
-## Available methods
+### Available methods
 
-### uploadUrl(`string` | `Closure` | `null` $uploadUrl)
+#### uploadUrl(`string` | `Closure` | `null` $uploadUrl)
 Sets the URL endpoint for image uploads. If not specified, the default upload URL from the config file will be used.
 
 `uploadUrl` (Default: `null`)
@@ -142,19 +142,19 @@ public function uploadImage(Request $request)
 
 For more details, see the [CKEditor Custom Upload Adapter documentation](https://ckeditor.com/docs/ckeditor5/latest/framework/deep-dive/upload-adapter.html#passing-additional-data-to-the-response).
 
-### name(`string` $name)
+#### name(`string` $name)
 Sets the name of the field. This will be used as the form field name.
 
 `name` (Default: `'ckeditor'`)
 
-### placeholder(`string` $placeholder)
+#### placeholder(`string` $placeholder)
 Sets the placeholder text displayed in the editor when it's empty.
 
 `placeholder` (Default: `'Type or paste your content here...'`)
 
 <br>
 
-# Testing
+## Testing
 
 ```bash
 composer test
@@ -164,26 +164,26 @@ The test suite uses PestPHP and includes unit tests for field instantiation, met
 
 <br>
 
-# Changelog
+## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+Please see [CHANGELOG](https://github.com/Kahu-Software-LLC/filament-ckeditor-field/blob/1.x/CHANGELOG.md) for more information on what has changed recently.
 
-# Contributing
+## Contributing
 
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/Kahu-Software-LLC/filament-ckeditor-field/blob/1.x/CONTRIBUTING.md) for details.
 
-# Security Vulnerabilities
+## Security Vulnerabilities
 
 Please email [hello@kahusoftware.com](mailto:hello@kahusoftware.com) any security vulnerabilities to ensure they're promptly addressed.
 
-# Credits
+## Credits
 
 -   [Thomas Johnson](https://github.com/tominal)
--   [All Contributors](../../contributors)
+-   [All Contributors](https://github.com/Kahu-Software-LLC/filament-ckeditor-field/graphs/contributors)
 
-# License
+## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/Kahu-Software-LLC/filament-ckeditor-field/blob/1.x/LICENSE.md) for more information.
 
 ---
 
