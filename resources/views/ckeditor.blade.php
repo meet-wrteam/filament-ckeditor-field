@@ -73,6 +73,7 @@
                                 ImageBlock,
                                 ImageCaption,
                                 ImageInline,
+
                                 @if($uploadUrl)
 
                                     ImageInsert,
@@ -84,6 +85,7 @@
                                     ImageInsertViaUrl,
 
                                 @endif
+
                                 ImageResize,
                                 ImageStyle,
                                 ImageTextAlternative,
@@ -107,7 +109,7 @@
 
                                     SimpleUploadAdapter,
                                 
-                                    @endif
+                                @endif
 
                                 SourceEditing,
                                 SpecialCharacters,
@@ -175,9 +177,6 @@
                                 ],
                                 shouldNotGroupWhenFull: false
                             },
-                            @if(!$isDisabled)
-                            // Autosave is disabled - we'll update state on blur/debounced changes instead
-                            @endif
                             fontFamily: {
                                 supportAllValues: true
                             },
@@ -348,13 +347,12 @@
                                 }
 
                             @endisset
+
                         })
                         .then(editor => {
                             window.ckeditorInstances["ckeditor-" + editorId].instance = editor;
 
                             // Find the main ckeditor class and add some helpful class names to it
-
-                            {{-- todo: @if($isRequired() && (! $isConcealed)) @endif --}}
 
                             document.getElementsByClassName('ck-editor__main')[0].classList.add('prose', 'max-w-none', 'dark:prose-invert')
 
@@ -375,6 +373,7 @@
                                 editor.enableReadOnlyMode('{{ $editorId }}');
 
                             @endif
+
                         })
                         .catch(err => {
                             console.error(err);
