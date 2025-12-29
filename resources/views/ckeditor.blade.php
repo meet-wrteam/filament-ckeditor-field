@@ -410,7 +410,7 @@
             </script>
             <div
                 x-data="{
-                    state: $wire.$entangle('{{ $getStatePath() }}').live,
+                    state: $wire.$entangle('{{ $getStatePath() }}'),
                     init() {
                         const key = 'ckeditor-{{ $editorId }}';
 
