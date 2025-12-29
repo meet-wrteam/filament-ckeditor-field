@@ -28,7 +28,7 @@
                     };
                 }
 
-                function createCKEditor(editorId, statePath, alpineComponent) {
+                window.createCKEditor = function(editorId, statePath, alpineComponent) {
                     // To prevent duplicates, halt here if an editor already exists
                     if (window.ckeditorInstances["ckeditor-" + editorId].instance) {
                         return;
@@ -108,7 +108,7 @@
                                 @if($uploadUrl)
 
                                     SimpleUploadAdapter,
-                                
+
                                 @endif
 
                                 SourceEditing,
@@ -155,13 +155,13 @@
                                     'underline',
                                     '|',
                                     'link',
-                                    
+
                                     @if($uploadUrl)
 
                                         'insertImage',
-                                    
+
                                     @endif
-                                    
+
                                     'insertTable',
                                     'highlight',
                                     'blockQuote',
@@ -351,22 +351,34 @@
                         })
                         .then(editor => {
                             window.ckeditorInstances["ckeditor-" + editorId].instance = editor;
+                            let instance = window.ckeditorInstances["ckeditor-" + editorId].instance;
 
                             // Find the main ckeditor class and add some helpful class names to it
-
                             document.getElementsByClassName('ck-editor__main')[0].classList.add('prose', 'max-w-none', 'dark:prose-invert')
+
+                            const sync = () => {
+                                const inst = window.ckeditorInstances["ckeditor-" + editorId];
+                                if (!inst?.alpineComponent) return;
+
+                                inst.__fromEditor = true;
+                                inst.alpineComponent.state = editor.getData();
+                                inst.__fromEditor = false;
+                            };
 
                             // Listen to changes (only if not disabled)
                             @if(!$isDisabled)
 
                                 // Update Alpine state immediately on every change (no network calls)
-                                editor.model.document.on('change:data', () => {
-                                    const instance = window.ckeditorInstances["ckeditor-" + editorId];
-                                    if (instance.alpineComponent) {
-                                        // Update Alpine state directly (will sync via $entangle on form submit)
-                                        instance.alpineComponent.state = editor.getData();
-                                    }
-                                });
+                                editor.model.document.on('change:data', sync);
+
+                                // Flush on Ctrl+S BEFORE Filament triggers save
+                                instance.onKeyDown = (e) => {
+                                    const isSave = (e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S');
+                                    if (!isSave) return;
+                                    sync();
+                                };
+
+                                window.addEventListener('keydown', instance.onKeyDown, true);
 
                             @else
 
@@ -380,16 +392,16 @@
                         });
                 }
 
-                function destroyCKEditor(editorId) {
-                    if (window.ckeditorInstances["ckeditor-" + editorId]?.instance) {
-                        window.ckeditorInstances["ckeditor-" + editorId].instance.destroy()
-                            .then(() => {
-                                window.ckeditorInstances["ckeditor-" + editorId].instance = null;
-                            })
-                            .catch(err => {
-                                console.error('Failed to destroy editor:', err);
-                            });
+                window.destroyCKEditor = function(editorId) {
+                    const instance = window.ckeditorInstances["ckeditor-" + editorId]?.instance;
+                    if (!instance) return;
+
+                    if (instance.onKeyDown) {
+                        window.removeEventListener('keydown', instance.onKeyDown, true);
+                        instance.onKeyDown = null;
                     }
+
+                    instance.destroy();
                 }
 
                 // Create bound wrapper functions for event listeners (will be set with Alpine component in init)
@@ -398,42 +410,54 @@
             </script>
             <div
                 x-data="{
-                    state: $wire.$entangle('{{ $getStatePath() }}'),
+                    state: $wire.$entangle('{{ $getStatePath() }}').live,
                     init() {
-                        const instance = window.ckeditorInstances['ckeditor-{{ $editorId }}'];
-                        
-                        // Create handler with Alpine component context
-                        instance.createHandler = () => createCKEditor('{{ $editorId }}', '{{ $statePath }}', this);
-                        
+                        const key = 'ckeditor-{{ $editorId }}';
+
+                        window.ckeditorInstances = window.ckeditorInstances || {};
+                        const instance = window.ckeditorInstances[key] = window.ckeditorInstances['ckeditor-{{ $editorId }}'] || {};
+
+                        const waitFor = (fnName, cb) => {
+                            const t = setInterval(() => {
+                                if (typeof window[fnName] === 'function') {
+                                    clearInterval(t);
+                                    cb();
+                                }
+                            }, 25);
+                        };
+
                         // Remove existing event listeners to prevent duplicates
-                        if (instance.createHandler) {
+                        if (instance?.createHandler) {
                             document.removeEventListener('livewire:navigated', instance.createHandler);
                         }
-                        if (instance.destroyHandler) {
+                        if (instance?.destroyHandler) {
                             document.removeEventListener('livewire:navigate', instance.destroyHandler);
                         }
 
+                        // Create handler with Alpine component context
+                        instance.createHandler = () => waitFor('createCKEditor', () => window.createCKEditor('{{ $editorId }}', '{{ $statePath }}', this));
+
+                        instance.destroyHandler = () => waitFor('destroyCKEditor', () => window.destroyCKEditor('{{ $editorId }}'));
+
                         // Add event listeners if not already added
-                        if (!instance.eventListenerAdded && instance.createHandler && instance.destroyHandler) {
-                            document.addEventListener('livewire:navigated', instance.createHandler);
-                            document.addEventListener('livewire:navigate', instance.destroyHandler);
-                            instance.eventListenerAdded = true;
-                        }
+                        document.addEventListener('livewire:navigated', instance.createHandler);
+                        document.addEventListener('livewire:navigate', instance.destroyHandler);
 
                         // Initialize editor immediately if ClassicEditor is available
                         this.$nextTick(() => {
-                            if (typeof ClassicEditor !== 'undefined' && !instance.instance) {
-                                const textarea = document.querySelector('#ckeditor-{{ $editorId }}');
-                                if (textarea) {
-                                    createCKEditor('{{ $editorId }}', '{{ $statePath }}', this);
-                                }
+                            if (!instance.instance) {
+                                instance.createHandler();
                             }
                         });
 
                         // Watch for state changes and update editor content
                         this.$watch('state', (value) => {
                             const editor = instance.instance;
-                            if (editor && value !== null && value !== undefined) {
+
+                            if (!editor) return;
+                            if (instance.__fromEditor) return;
+
+                            if (value !== null && value !== undefined) {
                                 const currentContent = editor.getData();
                                 // Only update if content actually changed to prevent loops
                                 if (currentContent !== value) {
