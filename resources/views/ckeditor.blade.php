@@ -480,7 +480,13 @@
                             if (!editor) return;
                             if (instance.__fromEditor) return;
 
-                            if (value !== null && value !== undefined) {
+                            // Handle null/undefined/empty - clear the editor
+                            if (value === null || value === undefined || value === '') {
+                                const currentContent = editor.getData();
+                                if (currentContent !== '') {
+                                    editor.setData('');
+                                }
+                            } else {
                                 const currentContent = editor.getData();
                                 // Only update if content actually changed to prevent loops
                                 if (currentContent !== value) {
