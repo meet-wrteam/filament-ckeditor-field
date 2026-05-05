@@ -1,11 +1,11 @@
 # Filament CKEditor Field
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/wrteam/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/wrteam/filament-ckeditor-field)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/meet-wrteam/filament-ckeditor-field/run-tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/meet-wrteam/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3A2.x)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/meet-wrteam/filament-ckeditor-field/run-tests.yml?branch=master&label=tests&style=flat-square)](https://github.com/meet-wrteam/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/wrteam/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/wrteam/filament-ckeditor-field)
 [![License](https://img.shields.io/packagist/l/wrteam/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
-> **Note:** This branch (`2.x`) supports FilamentPHP 4.x and 5.x.
+> **Branches:** `master` (stable) | `dev` (development) — Supports FilamentPHP 4.x and 5.x.
 
 # Features
 
