@@ -1,6 +1,6 @@
 <?php
 
-namespace Kahusoftware\FilamentCkeditorField;
+namespace Wrteam\FilamentCkeditorField;
 
 use Closure;
 use Filament\Forms\Components\Field;

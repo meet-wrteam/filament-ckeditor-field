@@ -1,6 +1,6 @@
 <?php
 
-namespace Kahusoftware\FilamentCkeditorField\Tests\Helpers;
+namespace Wrteam\FilamentCkeditorField\Tests\Helpers;
 
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;

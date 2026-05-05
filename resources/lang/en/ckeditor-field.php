@@ -1,6 +1,6 @@
 <?php
 
-// translations for kahusoftware/FilamentCkeditorField
+// translations for wrteam/FilamentCkeditorField
 return [
     //
 ];

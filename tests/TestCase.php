@@ -1,6 +1,6 @@
 <?php
 
-namespace Kahusoftware\FilamentCkeditorField\Tests;
+namespace Wrteam\FilamentCkeditorField\Tests;
 
 use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
 use BladeUI\Icons\BladeIconsServiceProvider;
@@ -18,7 +18,7 @@ use Illuminate\Support\ViewErrorBag;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RyanChandler\BladeCaptureDirective\BladeCaptureDirectiveServiceProvider;
-use Kahusoftware\FilamentCkeditorField\FilamentCkeditorFieldServiceProvider;
+use Wrteam\FilamentCkeditorField\FilamentCkeditorFieldServiceProvider;
 
 class TestCase extends Orchestra
 {

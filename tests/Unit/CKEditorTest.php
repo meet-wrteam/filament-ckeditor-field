@@ -1,6 +1,6 @@
 <?php
 
-use Kahusoftware\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\CKEditor;
 
 it('can be instantiated with default name', function () {
     $field = CKEditor::make();

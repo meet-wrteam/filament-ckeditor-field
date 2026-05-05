@@ -3,8 +3,8 @@
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
-use Kahusoftware\FilamentCkeditorField\CKEditor;
-use Kahusoftware\FilamentCkeditorField\Tests\Helpers\Livewire;
+use Wrteam\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\Tests\Helpers\Livewire;
 
 it('can set state path from its name', function (): void {
     $field = CKEditor::make($name = Str::random())

@@ -2,8 +2,8 @@
 
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
-use Kahusoftware\FilamentCkeditorField\CKEditor;
-use Kahusoftware\FilamentCkeditorField\Tests\Helpers\Livewire;
+use Wrteam\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\Tests\Helpers\Livewire;
 
 it('can render disabled ckeditor field', function () {
     $field = CKEditor::make('content')
