@@ -1,17 +1,15 @@
 # Filament CKEditor Field
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kahu-software-llc/filament-ckeditor-field/run-tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/kahu-software-llc/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3A2.x)
-[![Total Downloads](https://img.shields.io/packagist/dt/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/kahusoftware/filament-ckeditor-field)
-[![License](https://img.shields.io/packagist/l/kahusoftware/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/wrteam/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/wrteam/filament-ckeditor-field)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/meet-wrteam/filament-ckeditor-field/run-tests.yml?branch=2.x&label=tests&style=flat-square)](https://github.com/meet-wrteam/filament-ckeditor-field/actions?query=workflow%3Arun-tests+branch%3A2.x)
+[![Total Downloads](https://img.shields.io/packagist/dt/wrteam/filament-ckeditor-field.svg?style=flat-square)](https://packagist.org/packages/wrteam/filament-ckeditor-field)
+[![License](https://img.shields.io/packagist/l/wrteam/filament-ckeditor-field.svg?style=flat-square)](LICENSE.md)
 
-> **Note:** This branch (`2.x`) is specifically for FilamentPHP 4.x. If you're using FilamentPHP 3.x, please use the [`1.x` branch](https://github.com/kahu-software-llc/filament-ckeditor-field/tree/1.x).
-
-![](https://cdn.kahusoftware.com/uploads/kahu-software-llc-ckeditor-field.jpg)
+> **Note:** This branch (`2.x`) supports FilamentPHP 4.x and 5.x.
 
 # Features
 
--   CKEditor 5 integration for FilamentPHP 4 forms
+-   CKEditor 5 integration for FilamentPHP 4 & 5 forms
 -   Image upload support with configurable upload URLs
 -   Full control over image upload handling - you implement your own upload endpoint
 -   Highly customizable with fluent API
@@ -46,7 +44,7 @@
 You can install the field via composer:
 
 ```bash
-composer require kahusoftware/filament-ckeditor-field
+composer require wrteam/filament-ckeditor-field
 ```
 
 You can publish the config file with:
@@ -62,7 +60,7 @@ php artisan vendor:publish --tag="filament-ckeditor-field-config"
 Basic usage:
 
 ```php
-use Kahusoftware\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\CKEditor;
 
 CKEditor::make('content')
     ->uploadUrl(null)
@@ -174,11 +172,11 @@ Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 # Security Vulnerabilities
 
-Please email [hello@kahusoftware.com](mailto:hello@kahusoftware.com) any security vulnerabilities to ensure they're promptly addressed.
+If you discover a security vulnerability, please report it via [GitHub Issues](https://github.com/meet-wrteam/filament-ckeditor-field/issues) to ensure it is promptly addressed.
 
 # Credits
 
--   [Thomas Johnson](https://github.com/tominal)
+-   [Meet (wrteam)](https://github.com/meet-wrteam)
 -   [All Contributors](../../contributors)
 
 # License
