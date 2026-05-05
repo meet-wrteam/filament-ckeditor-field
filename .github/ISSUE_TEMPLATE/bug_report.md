@@ -41,7 +41,7 @@ If applicable, add screenshots to help explain your problem.
 
 ```php
 // Please provide a minimal code example that reproduces the issue
-use Kahusoftware\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\CKEditor;
 
 // Your code here
 ```

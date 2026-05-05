@@ -35,7 +35,7 @@ Example: "As a developer, I want to [...] so that [...]"
 If applicable, provide a code example of how you envision using this feature:
 
 ```php
-use Kahusoftware\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\CKEditor;
 
 // Example usage
 CKEditor::make('content')

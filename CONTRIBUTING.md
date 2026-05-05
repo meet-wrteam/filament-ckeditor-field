@@ -54,14 +54,14 @@ This is the most reliable and widely-used method for local PHP package developme
            }
        ],
        "require": {
-           "kahusoftware/filament-ckeditor-field": "@dev"
+           "wrteam/filament-ckeditor-field": "@dev"
        }
    }
    ```
 
 3. **Install with symlink preference:**
    ```bash
-   composer update kahusoftware/filament-ckeditor-field --prefer-source
+   composer update wrteam/filament-ckeditor-field --prefer-source
    ```
 
 **Important:** Always use `"symlink": true` and `--prefer-source` to ensure changes are reflected immediately.
@@ -126,7 +126,7 @@ Create a test form in your Laravel application:
 
 ```php
 // In a Filament resource or form
-use Kahusoftware\FilamentCkeditorField\CKEditor;
+use Wrteam\FilamentCkeditorField\CKEditor;
 
 public static function form(Form $form): Form
 {
@@ -203,7 +203,7 @@ public static function form(Form $form): Form
 
 If you have questions about contributing, feel free to:
 
-- Open a [GitHub Discussion](https://github.com/Kahu-Software-LLC/filament-ckeditor-field/discussions)
-- Email: [hello@kahusoftware.com](mailto:hello@kahusoftware.com)
+- Open a [GitHub Discussion](https://github.com/meet-wrteam/filament-ckeditor-field/discussions)
+- Open a [GitHub Issue](https://github.com/meet-wrteam/filament-ckeditor-field/issues)
 
 Thank you for contributing to the Filament CKEditor Field! 🎉 

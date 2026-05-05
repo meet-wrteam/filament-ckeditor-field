@@ -11,7 +11,7 @@ We actively support the following versions of this package with security updates
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please **do not** open a public issue. Instead, please email the security team directly at [hello@kahusoftware.com](mailto:hello@kahusoftware.com).
+If you discover a security vulnerability, please **do not** open a public issue. Instead, please report it via [GitHub Issues](https://github.com/meet-wrteam/filament-ckeditor-field/issues).
 
 Please include the following information in your report:
 
