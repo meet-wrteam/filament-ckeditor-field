@@ -51,23 +51,6 @@ You can install the field via composer:
 composer require wrteam/filament-ckeditor-field
 ```
 
-**If not published on Packagist**, add the repository to your project's `composer.json`:
-
-```json
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/meet-wrteam/filament-ckeditor-field"
-    }
-]
-```
-
-Then run:
-
-```bash
-composer require wrteam/filament-ckeditor-field:dev-master
-```
-
 You can publish the config file with:
 
 ```bash
