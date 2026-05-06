@@ -19,6 +19,10 @@ class CKEditor extends Field
 
     protected string $placeholder = 'Type or paste your content here...';
 
+    protected string | null $height = null;
+
+    protected bool $showPreview = false;
+
     protected string $view = 'filament-ckeditor-field::ckeditor';
 
     public static function make(?string $name = null): static
@@ -64,6 +68,30 @@ class CKEditor extends Field
         $this->placeholder = $placeholder;
 
         return $this;
+    }
+
+    public function height(string $height): self
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    public function getHeight(): ?string
+    {
+        return $this->height;
+    }
+
+    public function preview(bool $showPreview = true): self
+    {
+        $this->showPreview = $showPreview;
+
+        return $this;
+    }
+
+    public function getShowPreview(): bool
+    {
+        return $this->showPreview;
     }
 
     public function getContent(): string
