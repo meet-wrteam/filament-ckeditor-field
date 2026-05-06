@@ -12,6 +12,8 @@
 -   CKEditor 5 integration for FilamentPHP 4 & 5 forms
 -   Image upload support with configurable upload URLs
 -   Full control over image upload handling - you implement your own upload endpoint
+-   Configurable editor height
+-   HTML preview toggle to verify rendered output
 -   Highly customizable with fluent API
 -   Non-premium features only (free and open-source)
 -   Easy to configure and use
@@ -28,6 +30,8 @@
 - [Configuration](#configuration)
   - [Available methods](#available-methods)
     - [uploadUrl(`string` | `Closure` | `null` $uploadUrl)](#uploadurlstring--closure--null-uploadurl)
+    - [height(`string` $height)](#heightstring-height)
+    - [preview(`bool` $showPreview)](#previewbool-showpreview)
     - [name(`string` $name)](#namestring-name)
     - [placeholder(`string` $placeholder)](#placeholderstring-placeholder)
 - [Testing](#testing)
@@ -47,6 +51,23 @@ You can install the field via composer:
 composer require wrteam/filament-ckeditor-field
 ```
 
+**If not published on Packagist**, add the repository to your project's `composer.json`:
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/meet-wrteam/filament-ckeditor-field"
+    }
+]
+```
+
+Then run:
+
+```bash
+composer require wrteam/filament-ckeditor-field:dev-master
+```
+
 You can publish the config file with:
 
 ```bash
@@ -64,6 +85,21 @@ use Wrteam\FilamentCkeditorField\CKEditor;
 
 CKEditor::make('content')
     ->uploadUrl(null)
+```
+
+Full example with all options:
+
+```php
+use Wrteam\FilamentCkeditorField\CKEditor;
+
+CKEditor::make('content')
+    ->label('Content')
+    ->required()
+    ->uploadUrl('/api/upload-image')
+    ->height('400px')
+    ->preview()
+    ->placeholder('Start writing your content...')
+    ->columnSpanFull()
 ```
 
 <br>
@@ -139,6 +175,34 @@ public function uploadImage(Request $request)
 ```
 
 For more details, see the [CKEditor Custom Upload Adapter documentation](https://ckeditor.com/docs/ckeditor5/latest/framework/deep-dive/upload-adapter.html#passing-additional-data-to-the-response).
+
+### height(`string` $height)
+Sets a fixed height for the editor area. Accepts any valid CSS height value.
+
+`height` (Default: `null` — auto-expanding)
+
+```php
+CKEditor::make('content')
+    ->height('300px')   // compact
+    ->height('500px')   // medium
+    ->height('800px')   // tall
+```
+
+### preview(`bool` $showPreview)
+Enables a "Show Preview" toggle button below the editor. When clicked, it displays the rendered HTML output in a read-only panel — useful for verifying how content will look when displayed on the frontend.
+
+`preview` (Default: `false`)
+
+```php
+CKEditor::make('content')
+    ->preview()
+```
+
+The preview panel:
+- Updates in real-time as you type
+- Renders HTML with proper styling (Tailwind prose)
+- Supports dark mode
+- Can be toggled on/off by the user
 
 ### name(`string` $name)
 Sets the name of the field. This will be used as the form field name.
