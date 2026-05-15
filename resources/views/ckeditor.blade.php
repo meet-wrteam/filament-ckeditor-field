@@ -20,6 +20,10 @@
     >
         <div wire:ignore>
             <script type="text/javascript">
+                // Ensure the global registry exists. The head render-hook initializer
+                // can lose the race with this inline script under some panel render orders.
+                window.ckeditorInstances = window.ckeditorInstances || {};
+
                 // Initialize the instance and event listener flags if not already set
                 if (!window.ckeditorInstances["ckeditor-{{ $editorId }}"]) {
                     window.ckeditorInstances["ckeditor-{{ $editorId }}"] = {
@@ -401,10 +405,11 @@
                 x-data="{
                     state: $wire.$entangle('{{ $getStatePath() }}'),
                     init() {
-                        // Ensure instance state exists. Required for repeater items added via
-                        // Livewire morph: their inline <script> tag is inserted via innerHTML and
-                        // therefore never executes, so the top-of-file initializer does not run
-                        // for those editor IDs.
+                        // Ensure the global registry and this instance's entry both exist.
+                        // Required for repeater items added via Livewire morph: their inline
+                        // <script> tag is inserted via innerHTML and therefore never executes,
+                        // so the top-of-file initializer does not run for those editor IDs.
+                        window.ckeditorInstances = window.ckeditorInstances || {};
                         if (!window.ckeditorInstances['ckeditor-{{ $editorId }}']) {
                             window.ckeditorInstances['ckeditor-{{ $editorId }}'] = {
                                 instance: null,
