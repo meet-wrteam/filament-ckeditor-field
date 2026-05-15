@@ -1,20 +1,19 @@
-@php
-    $name = $getName();
-    $uploadUrl = $getUploadUrl();
-    $placeholder = $getPlaceholder();
-    $isConcealed = $isConcealed();
-    $statePath = $getStatePath();
-    $isDisabled = $isDisabled();
-    $height = $getHeight();
-    $showPreview = $getShowPreview();
-    // Create a safe identifier from statePath for use in JavaScript
-    $editorId = str_replace(['.', '[', ']'], ['-', '-', ''], $statePath);
-@endphp
-
 <x-dynamic-component
     :component="$getFieldWrapperView()"
     :field="$field"
 >
+    @php
+        $name = $getName();
+        $uploadUrl = $getUploadUrl();
+        $placeholder = $getPlaceholder();
+        $isConcealed = $isConcealed();
+        $statePath = $getStatePath();
+        $isDisabled = $isDisabled();
+        $height = $getHeight();
+        $showPreview = $getShowPreview();
+        // Safe identifier from statePath for use in JavaScript
+        $editorId = str_replace(['.', '[', ']'], ['-', '-', ''], $statePath);
+    @endphp
     <x-filament::input.wrapper
         :valid="! $errors->has($statePath)"
     >
