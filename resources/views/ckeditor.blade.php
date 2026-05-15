@@ -394,18 +394,29 @@
                     }
                 }
 
-                // Create bound wrapper functions for event listeners (will be set with Alpine component in init)
-                window.ckeditorInstances["ckeditor-{{ $editorId }}"].createHandler = null;
-                window.ckeditorInstances["ckeditor-{{ $editorId }}"].destroyHandler = () => destroyCKEditor('{{ $editorId }}');
+                // Handlers are bound inside Alpine init() so they are also set up for
+                // repeater items morphed in by Livewire (where this <script> tag does not execute).
             </script>
             <div
                 x-data="{
                     state: $wire.$entangle('{{ $getStatePath() }}'),
                     init() {
+                        // Ensure instance state exists. Required for repeater items added via
+                        // Livewire morph: their inline <script> tag is inserted via innerHTML and
+                        // therefore never executes, so the top-of-file initializer does not run
+                        // for those editor IDs.
+                        if (!window.ckeditorInstances['ckeditor-{{ $editorId }}']) {
+                            window.ckeditorInstances['ckeditor-{{ $editorId }}'] = {
+                                instance: null,
+                                eventListenerAdded: false,
+                                createHandler: null,
+                                destroyHandler: null,
+                            };
+                        }
                         const instance = window.ckeditorInstances['ckeditor-{{ $editorId }}'];
-                        
-                        // Create handler with Alpine component context
+
                         instance.createHandler = () => createCKEditor('{{ $editorId }}', '{{ $statePath }}', this);
+                        instance.destroyHandler = () => destroyCKEditor('{{ $editorId }}');
                         
                         // Remove existing event listeners to prevent duplicates
                         if (instance.createHandler) {
